@@ -9,6 +9,27 @@ public class Estrategia4 implements EstrategiaBusqueda {
     public Estrategia4() {
     }
 
+    public Nodo[] reconstruye_sol(Nodo n){
+        ArrayList<Nodo> lista = new ArrayList<Nodo>();
+        Nodo[] solucion;
+        Nodo actual = n;
+        int i = 0;
+
+
+        while (actual != null){
+            lista.add(actual);
+            actual = actual.getPadre();
+        }
+
+        solucion =  new Nodo[lista.size()];
+        for (Nodo nodo:lista) {
+            solucion[i]= nodo;
+            i++;
+        }
+
+        return solucion;
+    }
+
     @Override
     public Nodo[] soluciona(ProblemaBusqueda p) throws Exception{
         ArrayList<Nodo> n = new ArrayList<>();
