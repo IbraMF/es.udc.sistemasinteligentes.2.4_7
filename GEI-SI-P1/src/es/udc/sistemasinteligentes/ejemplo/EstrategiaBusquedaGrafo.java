@@ -7,4 +7,5 @@ public class EstrategiaBusquedaGrafo implements EstrategiaBusqueda {
     public Nodo[] soluciona(ProblemaBusqueda p){
         return  null;
     }
+
 }

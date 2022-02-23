@@ -9,8 +9,8 @@ public class Main {
         ProblemaAspiradora.EstadoAspiradora estadoInicial = new ProblemaAspiradora.EstadoAspiradora(ProblemaAspiradora.EstadoAspiradora.PosicionRobot.IZQ,
                                                                                                     ProblemaAspiradora.EstadoAspiradora.PosicionBasura.AMBAS);
         ProblemaBusqueda aspiradora = new ProblemaAspiradora(estadoInicial);
-
         EstrategiaBusqueda buscador = new Estrategia4();
-        System.out.println(buscador.soluciona(aspiradora));
+        Nodo[] solucion=buscador.soluciona(aspiradora);
+        System.out.println(solucion[solucion.length-1].getEstado());
     }
 }
