@@ -1,6 +1,6 @@
 package es.udc.sistemasinteligentes;
 
-import java.util.ArrayList;
+import es.udc.sistemasinteligentes.ejemplo.Nodo;
 
 public interface EstrategiaBusqueda {
     /**

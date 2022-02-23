@@ -1,4 +1,7 @@
-package es.udc.sistemasinteligentes;
+package es.udc.sistemasinteligentes.ejemplo;
+
+import es.udc.sistemasinteligentes.Accion;
+import es.udc.sistemasinteligentes.Estado;
 
 public class Nodo {
     Estado estado;
