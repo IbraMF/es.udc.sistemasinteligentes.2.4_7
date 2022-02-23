@@ -2,10 +2,10 @@ package es.udc.sistemasinteligentes;
 
 public class Nodo {
     Estado estado;
-    Estado padre;
-    Estado accion;
+    Nodo padre;
+    Accion accion;
 
-    public Nodo(Estado estado, Estado padre, Estado accion) {
+    public Nodo(Estado estado, Nodo padre, Accion accion) {
         this.estado = estado;
         this.padre = padre;
         this.accion = accion;
@@ -15,11 +15,11 @@ public class Nodo {
          return estado;
     }
 
-    public Estado getPadre() {
+    public Nodo getPadre() {
         return padre;
     }
 
-    public Estado getAccion() {
+    public Accion getAccion() {
         return accion;
     }
 
