@@ -3,21 +3,35 @@ package es.udc.sistemasinteligentes.ejemplo;
 import es.udc.sistemasinteligentes.*;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
 
 public class EstrategiaBusquedaGrafo implements EstrategiaBusqueda {
+
+    public Queue<Estado> sucesores(ProblemaBusqueda p, Queue<Estado> frontera, Estado estadoactual){
+        Accion[] accionesDisponibles = p.acciones(p.getEstadoInicial());
+
+        for(Accion accion : accionesDisponibles){
+            if(accion.esAplicable(estadoactual)) //comprobar si esta explorado ??
+                frontera.add(p.result(estadoactual, accion));
+        }
+        return frontera;
+    }
 
     /** Cambiar(copiado de estrategia4), aparece en pag56 teoria */
     @Override
     public Nodo[] soluciona(ProblemaBusqueda p) throws Exception {
 
+        Queue<Estado> frontera = new LinkedList<Estado>();
         ArrayList<Nodo> listaNodo = new ArrayList<>();
         ArrayList<Estado> explorados = new ArrayList<>();
-        ArrayList<Estado> sucesores = new ArrayList<>();
         Nodo padre = null;
         Accion accion;
         Estado estadoActual = p.getEstadoInicial();
 
         explorados.add(estadoActual);
+        //frontera = sucesores(p, frontera, estadoActual);
 
         int i = 1;
 
@@ -34,6 +48,7 @@ public class EstrategiaBusquedaGrafo implements EstrategiaBusqueda {
                     estadoActual = sc;
                     System.out.println((i++) + " - " + sc + " NO explorado");
                     explorados.add(estadoActual);
+                    //frontera = sucesores(p, frontera, estadoActual);
                     modificado = true;
                     System.out.println((i++) + " - Estado actual cambiado a " + estadoActual);
                     accion = acc;

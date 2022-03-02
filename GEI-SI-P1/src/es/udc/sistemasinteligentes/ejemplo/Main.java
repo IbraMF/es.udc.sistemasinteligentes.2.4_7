@@ -10,7 +10,7 @@ public class Main {
                                                                                                     ProblemaAspiradora.EstadoAspiradora.PosicionBasura.AMBAS);
         ProblemaBusqueda aspiradora = new ProblemaAspiradora(estadoInicial);
         EstrategiaBusqueda buscador = new Estrategia4();
-        Nodo[] solucion=buscador.soluciona(aspiradora);
+        Nodo[] solucion = buscador.soluciona(aspiradora);
         System.out.println(solucion[solucion.length-1].getEstado());
     }
 }
