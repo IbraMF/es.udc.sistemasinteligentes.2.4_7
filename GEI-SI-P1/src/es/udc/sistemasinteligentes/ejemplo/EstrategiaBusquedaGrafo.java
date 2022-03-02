@@ -9,7 +9,7 @@ import java.util.Queue;
 
 public class EstrategiaBusquedaGrafo implements EstrategiaBusqueda {
 
-    public Queue<Estado> sucesores(ProblemaBusqueda p, Queue<Estado> frontera, Estado estadoactual){
+    /*public Queue<Estado> sucesores(ProblemaBusqueda p, Queue<Estado> frontera, Estado estadoactual){
         Accion[] accionesDisponibles = p.acciones(p.getEstadoInicial());
 
         for(Accion accion : accionesDisponibles){
@@ -17,7 +17,7 @@ public class EstrategiaBusquedaGrafo implements EstrategiaBusqueda {
                 frontera.add(p.result(estadoactual, accion));
         }
         return frontera;
-    }
+    }*/
 
     /** Cambiar(copiado de estrategia4), aparece en pag56 teoria */
     @Override
