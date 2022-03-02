@@ -18,38 +18,52 @@ public class EstrategiaBusquedaGrafo implements EstrategiaBusqueda {
         Nodo padre=null;
         Accion ac;
         Estado estadoActual = p.getEstadoInicial();
-        explorados.add(estadoActual);
-
+        //explorados.add(estadoActual);
+        ArrayList<Nodo> frontera = new ArrayList<>();
+        frontera.add(new Nodo(estadoActual,null,null));
         int i = 1;
 
         System.out.println((i++) + " - Empezando búsqueda en " + estadoActual);
-
         while (!p.esMeta(estadoActual)){
-            System.out.println((i++) + " - " + estadoActual + " no es meta");
+            if(frontera.isEmpty()){
+                throw new Exception("No se ha podido encontrar una solución");
+            }
+            padre=frontera.get(0);
+            n.add(frontera.get(0));
+            frontera.remove(0);
             Accion[] accionesDisponibles = p.acciones(estadoActual);
-            boolean modificado = false;
-            for (Accion acc: accionesDisponibles) {
+            for(Accion acc: accionesDisponibles){
                 Estado sc = p.result(estadoActual, acc);
                 System.out.println((i++) + " - RESULT(" + estadoActual + ","+ acc + ")=" + sc);
-                if (!explorados.contains(sc)) {
-                    estadoActual = sc;
-                    System.out.println((i++) + " - " + sc + " NO explorado");
-                    explorados.add(estadoActual);
-                    modificado = true;
-                    System.out.println((i++) + " - Estado actual cambiado a " + estadoActual);
-                    ac=acc;
-                    Nodo nodo = new Nodo(estadoActual,padre,ac);
-                    n.add(nodo);
-                    padre=nodo;
+                if(p.esMeta(sc)){
+                    n.add(new Nodo(sc,padre,acc));
                     break;
                 }
-                else
-                    System.out.println((i++) + " - " + sc + " ya explorado");
+                if(!explorados.contains(estadoActual)){
+                    System.out.println((i++) + " - " + sc + " NO explorado");
+                    explorados.add(estadoActual);}
+                if(!explorados.contains(sc)){
+                    boolean esta=false;
+                    for (Nodo nf: frontera) {
+                        if(nf.estado == sc){
+                            esta=true;
+                            break;
+                        }
+                    }
+                    if(!esta){
+                        frontera.add(new Nodo(sc,padre,acc));
+                    }
+                }
             }
-            if (!modificado) throw new Exception("No se ha podido encontrar una solución");
+            if(frontera.size()>0){
+                estadoActual=frontera.get(0).estado;
+                System.out.println((i++) + " - Estado actual cambiado a " + estadoActual);
+            }
+            else{
+                break;
+            }
 
         }
-        System.out.println((i++) + " - FIN - " + estadoActual);
         Nodo[] nodos = new Nodo[n.size()]; int j=0;
         for (Nodo nodo:n) {
             nodos[j]= nodo;
