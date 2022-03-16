@@ -15,8 +15,9 @@ public class EstrategiaBusquedaAnchura implements EstrategiaBusqueda {//misma im
         Estado sc;
         for(Accion accion : accionesDisponibles){
             if(accion.esAplicable(estadoActual)){//comprobar si esta explorado ??
+                System.out.println(accion + " Es aplicable");
                 sc = p.result(estadoActual,accion);
-                System.out.println("\t-" + (i++) + " - RESULT(" + estadoActual + ","+ accion + ")=" + sc);
+                //System.out.println("\t-" + (i++) + "RESULT:" + estadoActual + ","+ accion + " = " + sc);
                 if(!Explorados.contains(sc)){
                     System.out.println("\t-" + (i++) + " - " + sc + " NO explorado");
                     boolean esta=false;
@@ -35,6 +36,9 @@ public class EstrategiaBusquedaAnchura implements EstrategiaBusqueda {//misma im
                     System.out.println("\t-" + (i++) + " - " + sc + " ya explorado");
                 }
 
+            }
+            else{
+                System.out.println(accion + " NO es aplicable");
             }
         }
         System.out.println("}Frontera expandida");
