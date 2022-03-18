@@ -1,9 +1,10 @@
 package es.udc.sistemasinteligentes.Ejercicio2;
-
 import es.udc.sistemasinteligentes.*;
+import es.udc.sistemasinteligentes.ejemplo.ProblemaAspiradora;
 
 import javax.swing.text.StyledEditorKit;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**Con esto se pueden modificar los valores que entran distintos de 0 en la matriz (buscar forma de que no pase) */
 
@@ -22,25 +23,30 @@ public class ProblemaCuadradoMagico extends ProblemaBusqueda {
 
         @Override
         public String toString() {
-            StringBuilder matirz= new StringBuilder("[");
+            StringBuilder matirz= new StringBuilder("[ ");
             for (int i = 0; i < cuadrado.length; i++) {
                 for (int j = 0; j < cuadrado.length; j++) {
                     matirz.append(cuadrado[i][j]).append(",");
                 }
+                matirz.deleteCharAt(matirz.length()-1).append(" | ");
             }
-            return matirz + "]" ;
+            matirz.delete(matirz.length()-3,matirz.length()-1); //elimina caracteres finales
+            return matirz + "]";
         }
 
         @Override
         public boolean equals(Object obj) {
             if (this == obj) return true;
             if (obj == null || getClass() != obj.getClass()) return false;
+
             return false;
         }
 
         @Override
         public int hashCode() {
-            return 0;
+            int result = Arrays.deepHashCode(cuadrado);
+            result = 31 * result;
+            return result;
         }
     }
 
@@ -74,23 +80,31 @@ public class ProblemaCuadradoMagico extends ProblemaBusqueda {
                         if (c[i][j] == nuevoValorCasilla) {
                             return false;
                         }
-
                     }
                 }
+                return  true;
             }
-            return true;
+            return false;
         }
 
         @Override
         public Estado aplicaA(Estado es) {
             EstadoCuadradoMagico eC = (EstadoCuadradoMagico) es;
-            int [][] c = eC.getCuadrado();
+
+            int [][] c = new int[eC.getCuadrado().length][eC.getCuadrado().length];
+            
+            for (int i = 0; i < eC.getCuadrado().length; i++){
+                for (int j = 0; j < eC.getCuadrado().length; j++){
+                    c[i][j] = eC.getCuadrado()[i][j];
+                }
+            }
+
             int N=c.length;
             int fil=casillaMf,col=casillaMc;
             boolean esta=false;
 
 
-            for (int i = 0; i < N; i++) {//comprueba si el nuevo valor existe en el caudrado
+            for (int i = 0; i < N; i++) {//comprueba si el nuevo valor existe en el cuadrado
                 for (int j = 0; j < N; j++) {
                     if(c[i][j]==nuevoValorCasilla){
                         esta =true;
@@ -98,19 +112,18 @@ public class ProblemaCuadradoMagico extends ProblemaBusqueda {
                         break;
                     }
                 }
+                if(esta) break;
             }
             if(esta){//si el valor existe intercambio las casillas
-                int aux = c[fil][col];
+                /*int aux = c[fil][col];
                 c[fil][col]=c[casillaMf][casillaMc];
-                c[casillaMf][casillaMc]= aux;
+                c[casillaMf][casillaMc]= aux;*/
             }
             else{ //si no existe se cambia directamente
                 c[casillaMf][casillaMc]=nuevoValorCasilla;
             }
-
-            Estado e = new EstadoCuadradoMagico(c);//Por algun motivo sobreescirbe el estado anterior a demas de crear uno nuevo
-
-            return e;
+            System.out.println("El estado actual sigue siendo " + Arrays.deepToString(((EstadoCuadradoMagico) es).cuadrado));
+            return new EstadoCuadradoMagico(c);
         }
     }
 
@@ -158,12 +171,12 @@ public class ProblemaCuadradoMagico extends ProblemaBusqueda {
             sumF=0;sumC=0;
         }
         for(int i=0;i<N;i++){
-           sumD1+=c[i][i];
+            sumD1+=c[i][i];
         }
         for(int i=0;i<N;i++){
             sumD2+=c[N-1-i][i];
         }
-        return sumD1 == sum && sumD2 == sum;
+        return (sumD1 == sum && sumD2 == sum);
     }
 
     @Override
