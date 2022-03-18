@@ -12,13 +12,19 @@ public class ProblemaCuadradoMagico extends ProblemaBusqueda {
 
     public static class EstadoCuadradoMagico extends Estado{
         private final int [][] cuadrado;
+        private final int [][] cuadradoInicial;
+
+        public int[][] getCuadradoInicial() {
+            return cuadradoInicial;
+        }
 
         public int[][] getCuadrado() {
             return cuadrado;
         }
 
-        public EstadoCuadradoMagico(int[][] cuadrado) {//Se usa para definir el estado inicial del cuadrado
+        public EstadoCuadradoMagico(int[][] cuadrado,int[][] cuadradoInicial) {//Se usa para definir el estado inicial del cuadrado
             this.cuadrado = cuadrado;
+            this.cuadradoInicial = cuadradoInicial;
         }
 
         @Override
@@ -36,10 +42,17 @@ public class ProblemaCuadradoMagico extends ProblemaBusqueda {
 
         @Override
         public boolean equals(Object obj) {
+            int igual=0;
             if (this == obj) return true;
             if (obj == null || getClass() != obj.getClass()) return false;
-
-            return false;
+            for (int i = 0; i < cuadrado.length; i++) {
+                for (int j = 0; j < cuadrado.length; j++) {
+                    if(((EstadoCuadradoMagico) obj).cuadrado[i][j]==cuadrado[i][j]){
+                        igual++;
+                    }
+                }
+            }
+            return igual==(cuadrado.length*cuadrado.length);
         }
 
         @Override
@@ -70,14 +83,18 @@ public class ProblemaCuadradoMagico extends ProblemaBusqueda {
         public boolean esAplicable(Estado es) {
             EstadoCuadradoMagico eC=(EstadoCuadradoMagico) es;
             int [][] c = eC.getCuadrado();
+            int [][] cI= eC.getCuadradoInicial();
             int N=c.length;
             if(nuevoValorCasilla>N*N||nuevoValorCasilla<=0||casillaMf<0||casillaMf>N||casillaMc<0||casillaMc>N){//casilla a modificar y nuevo valor válidos
                 return false;
             }
-            if(c[casillaMf][casillaMc]==0) {
+            if(cI[casillaMf][casillaMc]!=0){//comprueba si se puede o no modificar el valor de esa casilla
+                return false;
+            }
+            if(cI[casillaMf][casillaMc]==0) {
                 for (int i = 0; i < N; i++) {//comprueba si el nuevo valor existe en el caudrado
                     for (int j = 0; j < N; j++) {
-                        if (c[i][j] == nuevoValorCasilla) {
+                        if (cI[i][j] == nuevoValorCasilla) {//evita usar los valores asignados en el estado inicial
                             return false;
                         }
                     }
@@ -92,10 +109,11 @@ public class ProblemaCuadradoMagico extends ProblemaBusqueda {
             EstadoCuadradoMagico eC = (EstadoCuadradoMagico) es;
 
             int [][] c = new int[eC.getCuadrado().length][eC.getCuadrado().length];
-            
+            int [][] cI= new int[eC.getCuadradoInicial().length][eC.getCuadradoInicial().length];
             for (int i = 0; i < eC.getCuadrado().length; i++){
                 for (int j = 0; j < eC.getCuadrado().length; j++){
                     c[i][j] = eC.getCuadrado()[i][j];
+                    cI[i][j]= eC.getCuadradoInicial()[i][j];
                 }
             }
 
@@ -114,16 +132,16 @@ public class ProblemaCuadradoMagico extends ProblemaBusqueda {
                 }
                 if(esta) break;
             }
-            if(esta){//si el valor existe intercambio las casillas
-                /*int aux = c[fil][col];
+            if(esta){//si el valor existe intercambio las casillas(solo si se puede modificar la casilla)
+                int aux = c[fil][col];
                 c[fil][col]=c[casillaMf][casillaMc];
-                c[casillaMf][casillaMc]= aux;*/
+                c[casillaMf][casillaMc]= aux;
             }
             else{ //si no existe se cambia directamente
                 c[casillaMf][casillaMc]=nuevoValorCasilla;
             }
             System.out.println("El estado actual sigue siendo " + Arrays.deepToString(((EstadoCuadradoMagico) es).cuadrado));
-            return new EstadoCuadradoMagico(c);
+            return new EstadoCuadradoMagico(c,cI);
         }
     }
 

@@ -29,7 +29,7 @@ public class EstrategiaBusquedaGrafo implements EstrategiaBusqueda {
                     }
                     if(!esta){
                         System.out.println("\t-" + (i++) + " - " + sc + " NO está en la frontera");
-                        frontera.add(new Nodo(sc,padre,accion));
+                        frontera.add(new Nodo(sc,padre,accion,0));
                     }
                 }
                 else{
@@ -53,7 +53,7 @@ public class EstrategiaBusquedaGrafo implements EstrategiaBusqueda {
         Nodo actual ;
         Accion accion;
         Estado estadoActual = p.getEstadoInicial();
-        frontera.add(new Nodo(estadoActual,null,null));
+        frontera.add(new Nodo(estadoActual,null,null,0));
 
         int i = 1;
 

@@ -8,6 +8,9 @@ import java.util.LinkedList;
 import java.util.Queue;
 public class EstrategiaBusquedaAnchura implements EstrategiaBusqueda {//misma implementacion que la busqueda en grafo?
     /** PAG 70 Teoría */
+    private int nodosCreados;
+    private int nodosExplorados;
+
     public Queue<Nodo> sucesores(ProblemaBusqueda p, Queue<Nodo> frontera, Estado estadoActual, Nodo padre, ArrayList<Estado> Explorados){
         System.out.println("Expandiendo frontera{");
         Accion[] accionesDisponibles = p.acciones(p.getEstadoInicial());
@@ -29,11 +32,16 @@ public class EstrategiaBusquedaAnchura implements EstrategiaBusqueda {//misma im
                     }
                     if(!esta){
                         System.out.println("\t-" + (i++) + " - " + sc + " NO está en la frontera");
-                        frontera.add(new Nodo(sc,padre,accion));
+                        frontera.add(new Nodo(sc,padre,accion,0));
+                        System.out.println("\t-" + (i++) + " - " + sc + " Añadido a la frontera");
+                        nodosCreados++;
+                    }
+                    else{
+                        System.out.println("\t-" + (i++) + " - " + sc + " SI está en la frontera");
                     }
                 }
                 else{
-                    System.out.println("\t-" + (i++) + " - " + sc + " ya explorado");
+                    System.out.println("\t-" + (i++) + " - " + sc + " YA explorado");
                 }
 
             }
@@ -54,7 +62,7 @@ public class EstrategiaBusquedaAnchura implements EstrategiaBusqueda {//misma im
         Nodo actual ;
         Accion accion;
         Estado estadoActual = p.getEstadoInicial();
-        frontera.add(new Nodo(estadoActual,null,null));
+        frontera.add(new Nodo(estadoActual,null,null,0));
 
         int i = 1;
 
@@ -65,6 +73,7 @@ public class EstrategiaBusquedaAnchura implements EstrategiaBusqueda {//misma im
             }
             else{
                 actual=frontera.poll();//cojo el nodo padre (primero de la frontera) y lo elimino de la cola
+                nodosExplorados++;
             }
             if(p.esMeta(actual.getEstado())){
                 System.out.println((i++) + " - " + actual.getEstado() + " es meta" );
@@ -74,7 +83,6 @@ public class EstrategiaBusquedaAnchura implements EstrategiaBusqueda {//misma im
                 System.out.println((i++) + " - " + estadoActual + " no es meta");
                 explorados.add(estadoActual);
                 frontera=sucesores(p,frontera,estadoActual,actual,explorados);
-
             }
             if(frontera.size()>0){
                 estadoActual=frontera.peek().getEstado();
@@ -82,8 +90,8 @@ public class EstrategiaBusquedaAnchura implements EstrategiaBusqueda {//misma im
                 listaNodo.add(frontera.peek());
             }
         }
-
-        System.out.println((i++) + " - FIN - " + estadoActual);
+        System.out.println((i++) + " - FIN - " + estadoActual + " : Creados: " + nodosCreados + " nodos ,Explorados: "
+            + nodosExplorados + " nodos");
         Nodo[] arrayNodo = new Nodo[listaNodo.size()]; int j=0;
         for (Nodo nodo:listaNodo) {
             arrayNodo[j]= nodo;

@@ -16,11 +16,15 @@ public class Main {
         CuadradoT[1][0]=3;  CuadradoT[1][1]=5;
         CuadradoT[2][1]=1;
 
-        ProblemaCuadradoMagico.EstadoCuadradoMagico estadoInicial =new ProblemaCuadradoMagico.EstadoCuadradoMagico(CuadradoT);
+
+        ProblemaCuadradoMagico.EstadoCuadradoMagico estadoInicial =new ProblemaCuadradoMagico.EstadoCuadradoMagico(CuadradoT,CuadradoT);
         ProblemaBusqueda cuadrado= new ProblemaCuadradoMagico(estadoInicial);
         Accion[] accionesDisponibles = cuadrado.acciones(estadoInicial);
-        EstrategiaBusqueda buscador1 =new EstrategiaBusquedaAnchura();
+        EstrategiaBusqueda buscador1 =new EstrategiaBusquedaAnchura();/* Anchura funciona*/
         Nodo[] solucion= buscador1.soluciona(cuadrado);
-        System.out.println(solucion[solucion.length-1].getEstado());
+        EstrategiaBusqueda buscador2 =new EstrategiaBusquedaProfundidad();
+        Nodo[] solucion2= buscador2.soluciona(cuadrado);
+        System.out.println("Estrategia en anchura " + solucion[solucion.length-1].getEstado());
+        System.out.println("Estrategia en profundidad " + solucion2[solucion2.length-1].getEstado());
     }
 }

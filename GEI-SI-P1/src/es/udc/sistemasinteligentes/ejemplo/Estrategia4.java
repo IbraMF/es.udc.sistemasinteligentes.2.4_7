@@ -57,7 +57,7 @@ public class Estrategia4 implements EstrategiaBusqueda {
                     modificado = true;
                     System.out.println((i++) + " - Estado actual cambiado a " + estadoActual);
                     accion = acc;
-                    Nodo nodo = new Nodo(estadoActual,padre,accion);
+                    Nodo nodo = new Nodo(estadoActual,padre,accion,0);
                     listaNodo.add(nodo);
                     padre = nodo;
                     break;

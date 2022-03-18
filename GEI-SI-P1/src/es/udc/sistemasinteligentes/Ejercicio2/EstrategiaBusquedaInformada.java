@@ -1,25 +1,20 @@
 package es.udc.sistemasinteligentes.Ejercicio2;
 
-import es.udc.sistemasinteligentes.*;
+import es.udc.sistemasinteligentes.Accion;
+import es.udc.sistemasinteligentes.Estado;
+import es.udc.sistemasinteligentes.EstrategiaBusqueda;
+import es.udc.sistemasinteligentes.ProblemaBusqueda;
 import es.udc.sistemasinteligentes.ejemplo.Nodo;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.Stack;
+import java.util.PriorityQueue;
 
-public class EstrategiaBusquedaProfundidad implements EstrategiaBusqueda {//igual que busqueda en grafo pero
-    private int nodosCreados;
-    private int nodosExplorados;
+/**IMmplementa busqueda informada A* */
+public class EstrategiaBusquedaInformada implements EstrategiaBusqueda {
 
-    public int getNodosCreados() {
-        return nodosCreados;
-    }
-    public int getNodosExplorados() {
-        return nodosExplorados;
-    }                                              // usando una pila en vez de una cola
-    /** PAG 84 Teoría */
-    public Stack<Nodo> sucesores(ProblemaBusqueda p, Stack<Nodo> frontera, Estado estadoActual, Nodo padre, ArrayList<Estado> Explorados){
+    public Queue<Nodo> sucesores(ProblemaBusqueda p, Queue<Nodo> frontera, Estado estadoActual,Nodo padre,ArrayList<Estado> Explorados){
         System.out.println("Expandiendo frontera{");
         Accion[] accionesDisponibles = p.acciones(p.getEstadoInicial());
         int i=0;
@@ -40,21 +35,12 @@ public class EstrategiaBusquedaProfundidad implements EstrategiaBusqueda {//igua
                     if(!esta){
                         System.out.println("\t-" + (i++) + " - " + sc + " NO está en la frontera");
                         frontera.add(new Nodo(sc,padre,accion,0));
-                        System.out.println("\t-" + (i++) + " - " + sc + " Añadido a la frontera");
-                        nodosCreados++;
                     }
-                    else{
-                        System.out.println("\t-" + (i++) + " - " + sc + " SI está en la frontera");
-                    }
-                    System.out.println("\t-" + (i++) + " - " + sc + " YA explorado");
                 }
                 else{
                     System.out.println("\t-" + (i++) + " - " + sc + " ya explorado");
                 }
 
-            }
-            else{
-                System.out.println(accion + " NO es aplicable");
             }
         }
         System.out.println("}Frontera expandida");
@@ -62,7 +48,7 @@ public class EstrategiaBusquedaProfundidad implements EstrategiaBusqueda {//igua
     }
     @Override
     public Nodo[] soluciona(ProblemaBusqueda p) throws Exception {
-        Stack<Nodo> frontera = new Stack<>();
+        Queue<Nodo> frontera = new LinkedList<>();
         ArrayList<Nodo> listaNodo = new ArrayList<>();
         ArrayList<Estado> explorados = new ArrayList<>();
         Nodo padre = null;
@@ -79,8 +65,7 @@ public class EstrategiaBusquedaProfundidad implements EstrategiaBusqueda {//igua
                 throw new Exception("No se ha podido encontrar una solución");
             }
             else{
-                actual=frontera.pop();//cojo el ultimo nodo de la pila(cola LIFO)
-                nodosExplorados++;    //(ultimo de la frontera) y lo elimino de la pila
+                actual=frontera.poll();//cojo el nodo padre (primero de la frontera) y lo elimino de la cola
             }
             if(p.esMeta(actual.getEstado())){
                 System.out.println((i++) + " - " + actual.getEstado() + " es meta" );
@@ -90,6 +75,7 @@ public class EstrategiaBusquedaProfundidad implements EstrategiaBusqueda {//igua
                 System.out.println((i++) + " - " + estadoActual + " no es meta");
                 explorados.add(estadoActual);
                 frontera=sucesores(p,frontera,estadoActual,actual,explorados);
+
             }
             if(frontera.size()>0){
                 estadoActual=frontera.peek().getEstado();
@@ -98,8 +84,7 @@ public class EstrategiaBusquedaProfundidad implements EstrategiaBusqueda {//igua
             }
         }
 
-        System.out.println((i++) + " - FIN - " + estadoActual + " : Creados: " + nodosCreados + " nodos ,Explorados: "
-                + nodosExplorados + " nodos");
+        System.out.println((i++) + " - FIN - " + estadoActual);
         Nodo[] arrayNodo = new Nodo[listaNodo.size()]; int j=0;
         for (Nodo nodo:listaNodo) {
             arrayNodo[j]= nodo;
