@@ -85,6 +85,11 @@ public class ProblemaCuadradoMagico extends ProblemaBusqueda {
             int [][] c = eC.getCuadrado();
             int [][] cI= eC.getCuadradoInicial();
             int N=c.length;
+            int sum = N*((N*N)+1)/2;
+            int sumF = 0;
+            int sumC = 0;
+            int sumD1 = 0, sumD2 = 0;
+            boolean D = true;
             if(nuevoValorCasilla>N*N||nuevoValorCasilla<=0||casillaMf<0||casillaMf>N||casillaMc<0||casillaMc>N){//casilla a modificar y nuevo valor válidos
                 return false;
             }
@@ -97,9 +102,18 @@ public class ProblemaCuadradoMagico extends ProblemaBusqueda {
                         if (cI[i][j] == nuevoValorCasilla) {//evita usar los valores asignados en el estado inicial
                             return false;
                         }
+                        //se suman fila y columna que involucran la casilla a rellenar y, las diagonales
+                        if (i == j){sumD1+=cI[i][j];}
+                        if (j == (N-1-i)) {sumD2+=cI[i][j];}
+                        if (i == casillaMf){sumF+=cI[i][j];}
+                        if (j == casillaMc){sumC+=cI[i][j];}
                     }
                 }
-                return  true;
+                //Se comprueba si el valor a rellenar incumple las reglas del cuadrado al sumar su valor con su fila, columna o diagonal en caso de que pertenezca a ella
+                if (casillaMc == (N-1-casillaMf)){
+                    D = (((sumD2 + nuevoValorCasilla) <= sum) && ((sumD1 + nuevoValorCasilla) <= sum));
+                }
+                return (((sumC + nuevoValorCasilla) <= sum) && ((sumF + nuevoValorCasilla) <= sum) && D);
             }
             return false;
         }
@@ -140,7 +154,7 @@ public class ProblemaCuadradoMagico extends ProblemaBusqueda {
             else{ //si no existe se cambia directamente
                 c[casillaMf][casillaMc]=nuevoValorCasilla;
             }
-            System.out.println("El estado actual sigue siendo " + Arrays.deepToString(((EstadoCuadradoMagico) es).cuadrado));
+            //System.out.println("El estado actual sigue siendo " + Arrays.deepToString(((EstadoCuadradoMagico) es).cuadrado));
             return new EstadoCuadradoMagico(c,cI);
         }
     }
