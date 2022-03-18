@@ -24,7 +24,10 @@ public class Main {
         Nodo[] solucion= buscador1.soluciona(cuadrado);
         EstrategiaBusqueda buscador2 =new EstrategiaBusquedaProfundidad();
         Nodo[] solucion2= buscador2.soluciona(cuadrado);
+        EstrategiaBusqueda buscador3 =new EstrategiaBusquedaInformada();
+        Nodo[] solucion3 = buscador3.soluciona(cuadrado);
         System.out.println("Estrategia en anchura " + solucion[solucion.length-1].getEstado());
         System.out.println("Estrategia en profundidad " + solucion2[solucion2.length-1].getEstado());
+        System.out.println("Estrategia en Informada " + solucion3[solucion3.length-1].getEstado());
     }
 }

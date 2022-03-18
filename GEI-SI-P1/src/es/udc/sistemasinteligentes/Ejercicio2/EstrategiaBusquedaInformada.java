@@ -13,8 +13,30 @@ import java.util.PriorityQueue;
 
 /**IMmplementa busqueda informada A* */
 public class EstrategiaBusquedaInformada implements EstrategiaBusqueda {
+    public Queue<Nodo> ordenarForntera(Queue<Nodo> frontera){
+        boolean ordenada=false;
+        Nodo menor=frontera.peek();
+        int s=frontera.size();
+        Queue<Nodo> nFrontera=new LinkedList<>();
+        while(!ordenada){
+            for (Nodo n:frontera) {
+                assert menor != null;
+                if(n.compareTo(menor)<=0){
+                    menor=n;
+                }
+            }
+            nFrontera.add(menor);
+            frontera.remove(menor);
+            menor=frontera.peek();
 
+            if(nFrontera.size() == s){
+                ordenada=true;
+            }
+        }
+        return nFrontera;
+    }
     public Queue<Nodo> sucesores(ProblemaBusqueda p, Queue<Nodo> frontera, Estado estadoActual,Nodo padre,ArrayList<Estado> Explorados){
+        HeuristicaC h=new HeuristicaC();
         System.out.println("Expandiendo frontera{");
         Accion[] accionesDisponibles = p.acciones(p.getEstadoInicial());
         int i=0;
@@ -34,7 +56,7 @@ public class EstrategiaBusquedaInformada implements EstrategiaBusqueda {
                     }
                     if(!esta){
                         System.out.println("\t-" + (i++) + " - " + sc + " NO está en la frontera");
-                        frontera.add(new Nodo(sc,padre,accion,0));
+                        frontera.add(new Nodo(sc,padre,accion,h.evalua(sc)));
                     }
                 }
                 else{
@@ -48,6 +70,7 @@ public class EstrategiaBusquedaInformada implements EstrategiaBusqueda {
     }
     @Override
     public Nodo[] soluciona(ProblemaBusqueda p) throws Exception {
+        HeuristicaC h = new HeuristicaC();
         Queue<Nodo> frontera = new LinkedList<>();
         ArrayList<Nodo> listaNodo = new ArrayList<>();
         ArrayList<Estado> explorados = new ArrayList<>();
@@ -55,7 +78,7 @@ public class EstrategiaBusquedaInformada implements EstrategiaBusqueda {
         Nodo actual ;
         Accion accion;
         Estado estadoActual = p.getEstadoInicial();
-        frontera.add(new Nodo(estadoActual,null,null,0));
+        frontera.add(new Nodo(estadoActual,null,null,h.evalua(estadoActual)));
 
         int i = 1;
 
@@ -75,6 +98,8 @@ public class EstrategiaBusquedaInformada implements EstrategiaBusqueda {
                 System.out.println((i++) + " - " + estadoActual + " no es meta");
                 explorados.add(estadoActual);
                 frontera=sucesores(p,frontera,estadoActual,actual,explorados);
+                System.out.println("Ordenando nodos");
+                frontera=ordenarForntera(frontera);
 
             }
             if(frontera.size()>0){
